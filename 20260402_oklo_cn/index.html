@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Oklo Inc. (OKLO) 深度研究报告 | 2026.04.02</title>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+<style>
+:root {
+  --bg-page: #FFFFFF;
+  --bg-card: #F8F8F8;
+  --bg-header: #0A1628;
+  --bg-header2: #112240;
+  --text-primary: #1A1A2E;
+  --text-secondary: #5C6370;
+  --text-light: #FFFFFF;
+  --up: #E53935;
+  --down: #43A047;
+  --neutral: #757575;
+  --accent: #1565C0;
+  --accent-light: #1E88E5;
+  --warning: #E65100;
+  --nuclear: #F57C00;
+  --border: #E0E0E0;
+  --bg-inside: #F0F4FF;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--bg-page);
+  color: var(--text-primary);
+  font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', 'Noto Sans CJK SC', sans-serif;
+  max-width: 1100px;
+  margin: 0 auto;
+  line-height: 1.8;
+  font-size: 15px;
+  padding-bottom: 60px;
+}
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* === Header === */
+.report-header {
+  background: var(--bg-header);
+  background-image: linear-gradient(135deg, #0A1628 0%, #1B3A5C 50%, #0A1628 100%);
+  color: var(--text-light);
+  padding: 48px 52px 40px;
+  border-bottom: 5px solid var(--nuclear);
+  position: relative;
+}
+.report-header::after {
+  content: '☢';
+  position: absolute;
+  right: 52px;
+  top: 40px;
+  font-size: 60px;
+  opacity: 0.08;
+}
+.badge-row { display: flex; gap: 10px; margin-bottom: 18px; flex-wrap: wrap; }
+.badge {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 3px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+.badge.nuclear { background: var(--nuclear); color: white; }
+.badge.blue { background: var(--accent); color: white; }
+.badge.red { background: var(--up); color: white; }
+.badge.orange { background: var(--warning); color: white; }
+.badge.green { background: var(--down); color: white; }
+.badge.gray { background: #37474F; color: rgba(255,255,255,0.8); }
+.report-title { font-size: 30px; font-weight: 800; margin-bottom: 8px; letter-spacing: -0.5px; }
+.report-subtitle { font-size: 14px; opacity: 0.65; margin-bottom: 20px; }
+.report-meta { font-size: 13px; opacity: 0.55; display: flex; gap: 24px; flex-wrap: wrap; }
+
+/* === Price Bar === */
+.price-bar {
+  background: var(--bg-header2);
+  padding: 24px 52px;
+  display: flex;
+  gap: 0;
+  align-items: center;
+  flex-wrap: wrap;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.price-item { display: flex; flex-direction: column; padding: 0 28px; }
+.price-item:first-child { padding-left: 0; }
+.price-divider { width: 1px; height: 40px; background: rgba(255,255,255,0.1); }
+.price-label { font-size: 11px; color: rgba(255,255,255,0.45); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+.price-value { font-size: 20px; font-weight: 800; color: white; }
+.price-value.up { color: #EF9A9A; }
+.price-value.down { color: #A5D6A7; }
+.price-value.gold { color: #FFD54F; }
+.price-value.highlight { color: #FFD54F; }
+
+/* === Content === */
+.content { padding: 0 52px; }
+
+/* === Summary Box === */
+.summary-box {
+  background: linear-gradient(135deg, #0A1628, #1B3A5C);
+  border-radius: 12px;
+  padding: 28px 32px;
+  margin: 28px 0;
+  border-left: 5px solid var(--nuclear);
+}
+.summary-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--nuclear);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin-bottom: 12px;
+}
+.summary-text {
+  font-size: 15px;
+  line-height: 1.9;
+  color: rgba(255,255,255,0.88);
+}
+.summary-text strong { color: #FFD54F; }
+
+/* === Section === */
+.section-title {
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 44px 0 20px 0;
+  padding-bottom: 12px;
+  border-bottom: 3px solid var(--accent);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.section-num {
+  background: var(--accent);
+  color: white;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 3px;
+}
+p { margin-bottom: 14px; color: #333; }
+strong { color: var(--text-primary); }
+em { color: var(--accent); font-style: normal; font-weight: 600; }
+
+/* === Metrics Grid === */
+.metric-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(155px, 1fr));
+  gap: 12px;
+  margin: 20px 0 28px;
+}
+.metric-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 18px 20px;
+}
+.metric-label { font-size: 11px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+.metric-value { font-size: 22px; font-weight: 800; margin-bottom: 4px; }
+.metric-change { font-size: 13px; font-weight: 600; }
+.metric-change.up { color: var(--up); }
+.metric-change.down { color: var(--down); }
+
+/* === Tables === */
+.data-table { width: 100%; border-collapse: collapse; margin: 16px 0 24px; font-size: 14px; }
+.data-table th {
+  background: var(--bg-header);
+  color: white;
+  padding: 12px 16px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.data-table td { padding: 11px 16px; border-bottom: 1px solid var(--border); text-align: right; }
+.data-table td:first-child { text-align: left; }
+.data-table tr:nth-child(even) td { background: #FAFAFA; }
+.data-table tr:hover td { background: #EEF4FF; }
+.data-table .highlight-red td { background: #FFF3F0 !important; color: var(--up); font-weight: 700; }
+.data-table .highlight-green td { background: #F0FFF4 !important; }
+
+/* === Chart Grid === */
+.chart-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 20px 0 28px; }
+.chart-grid.single { grid-template-columns: 1fr; }
+.chart-container {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+.chart-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 16px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--border);
+}
+
+/* === Risk Cards === */
+.risk-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin: 20px 0 28px; }
+.risk-card { border-radius: 10px; padding: 20px; border-left: 4px solid; }
+.risk-card.red { background: #FFF8F6; border-color: var(--up); }
+.risk-card.orange { background: #FFF8F0; border-color: var(--warning); }
+.risk-card.green { background: #F0FFF4; border-color: var(--down); }
+.risk-card.blue { background: #EEF4FF; border-color: var(--accent); }
+.risk-title {
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.risk-card.red .risk-title { color: var(--up); }
+.risk-card.orange .risk-title { color: var(--warning); }
+.risk-card.green .risk-title { color: var(--down); }
+.risk-card.blue .risk-title { color: var(--accent); }
+.risk-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.risk-card.red .risk-dot { background: var(--up); }
+.risk-card.orange .risk-dot { background: var(--warning); }
+.risk-card.green .risk-dot { background: var(--down); }
+.risk-card.blue .risk-dot { background: var(--accent); }
+.risk-desc { font-size: 13px; color: #555; line-height: 1.65; }
+.risk-desc ul { margin: 8px 0 0 16px; }
+.risk-desc li { margin-bottom: 4px; }
+
+/* === Verdict === */
+.verdict-box {
+  background: var(--bg-header);
+  background-image: linear-gradient(135deg, #0A1628, #1B3A5C);
+  border-radius: 12px;
+  padding: 28px 32px;
+  margin: 24px 0;
+  color: white;
+}
+.verdict-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--nuclear);
+  margin-bottom: 14px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+}
+.verdict-text { font-size: 15px; line-height: 1.9; color: rgba(255,255,255,0.88); margin-bottom: 20px; }
+.verdict-text strong { color: #FFD54F; }
+.verdict-actions { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+.action-card {
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 8px;
+  padding: 16px;
+}
+.action-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; color: rgba(255,255,255,0.45); margin-bottom: 6px; }
+.action-value { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+.action-note { font-size: 12px; color: rgba(255,255,255,0.55); line-height: 1.5; }
+
+/* === Stars === */
+.stars { color: #FFD700; letter-spacing: 2px; font-size: 17px; }
+
+/* === Alert === */
+.alert-box {
+  background: #FFF8E1;
+  border: 1px solid #FFE082;
+  border-left: 4px solid var(--warning);
+  border-radius: 6px;
+  padding: 14px 18px;
+  margin: 16px 0;
+  font-size: 14px;
+  color: #5D4037;
+}
+.alert-box strong { color: var(--warning); }
+
+/* === Tag === */
+.tag-list { display: flex; gap: 8px; flex-wrap: wrap; margin: 12px 0; }
+.tag {
+  background: #EEF4FF;
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 20px;
+  border: 1px solid #BBDEFB;
+}
+
+/* === Footer === */
+.report-footer {
+  margin: 40px 52px 0;
+  padding: 20px 0;
+  border-top: 2px solid var(--border);
+  font-size: 12px;
+  color: var(--text-secondary);
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+/* === Responsive === */
+@media (max-width: 768px) {
+  .report-header, .price-bar, .content, .report-footer { padding-left: 24px; padding-right: 24px; }
+  .chart-grid { grid-template-columns: 1fr; }
+  .risk-grid { grid-template-columns: 1fr; }
+  .verdict-actions { grid-template-columns: 1fr; }
+  .price-bar { gap: 0; }
+  .price-item { padding: 0 16px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ====== HEADER ====== -->
+<div class="report-header">
+  <div class="badge-row">
+    <span class="badge nuclear">NYSE: OKLO</span>
+    <span class="badge blue">先进核能 SMR</span>
+    <span class="badge red">零营收</span>
+    <span class="badge orange">高度投机</span>
+  </div>
+  <div class="report-title">Oklo Inc. (OKLO)</div>
+  <div class="report-subtitle">先进小型模块化反应堆（SMR）开发商 · Aurora 核电站</div>
+  <div class="report-meta">
+    <span>研究日期：2026.04.02</span>
+    <span>市值：$8.34B</span>
+    <span>股价：$48.07</span>
+    <span>流通股：173.57M</span>
+    <span>分析师：Buy | 目标价：$99.58</span>
+  </div>
+</div>
+
+<!-- ====== PRICE BAR ====== -->
+<div class="price-bar">
+  <div class="price-item">
+    <span class="price-label">当前股价</span>
+    <span class="price-value">$48.07</span>
+  </div>
+  <div class="price-divider"></div>
+  <div class="price-item">
+    <span class="price-label">总市值</span>
+    <span class="price-value">$8.34B</span>
+  </div>
+  <div class="price-divider"></div>
+  <div class="price-item">
+    <span class="price-label">52周最高</span>
+    <span class="price-value gold">$193.84</span>
+  </div>
+  <div class="price-divider"></div>
+  <div class="price-item">
+    <span class="price-label">52周最低</span>
+    <span class="price-value">$5.35</span>
+  </div>
+  <div class="price-divider"></div>
+  <div class="price-item">
+    <span class="price-label">现金储备</span>
+    <span class="price-value gold">$1.23B</span>
+  </div>
+  <div class="price-divider"></div>
+  <div class="price-item">
+    <span class="price-label">每股净现金</span>
+    <span class="price-value">$7.07</span>
+  </div>
+  <div class="price-divider"></div>
+  <div class="price-item">
+    <span class="price-label">分析师目标</span>
+    <span class="price-value up">$99.58</span>
+  </div>
+</div>
+
+<!-- ====== CONTENT ====== -->
+<div class="content">
+
+<!-- 一句话总结 -->
+<div class="summary-box">
+  <div class="summary-label">一句话总结</div>
+  <div class="summary-text">
+    Oklo 是美国唯一上市的<strong>先进小堆（SMR）概念纯标的</strong>，2025年股价从$5.35暴涨至$193.84（+3523%），后又回落至$48。当前<strong>$8.34B市值对应$0营收</strong>、<strong>$115M年现金消耗</strong>、<strong>$1.23B现金储备</strong>。核心风险：① NRC审批极慢（预审自2019年至今未批）；② 成本居高不下；③ 竞争加剧；④ 无实质收入+持续稀释。股价85%为"梦想估值"。
+  </div>
+</div>
+
+<!-- SECTION 1: 公司概况 -->
+<div class="section-title">
+  <span class="section-num">1</span>
+  公司概况与业务模式
+</div>
+
+<p>Oklo Inc. 是一家成立于2013年的<strong>先进核能公司</strong>，专注于小型模块化反应堆（SMR）的开发与商业化。公司于2021年7月通过与特殊目的收购公司 AltC Acquisition Corp. 合并在纽交所上市，代码 <strong>OKLO</strong>。截至目前，公司<strong>零营收</strong>，属典型的 pre-revenue（上市前）开发阶段公司。</p>
+
+<div class="metric-grid">
+  <div class="metric-card">
+    <div class="metric-label">IPO日期</div>
+    <div class="metric-value">2021-07-05</div>
+    <div class="metric-change">AltC SPAC合并</div>
+  </div>
+  <div class="metric-card">
+    <div class="metric-label">IPO价格</div>
+    <div class="metric-value">$10.05</div>
+    <div class="metric-change up">距今+378%</div>
+  </div>
+  <div class="metric-card">
+    <div class="metric-label">现金储备</div>
+    <div class="metric-value">$1.23B</div>
+    <div class="metric-change">近零负债</div>
+  </div>
+  <div class="metric-card">
+    <div class="metric-label">年现金消耗</div>
+    <div class="metric-value">-$115M</div>
+    <div class="metric-change down">FCF Burn</div>
+  </div>
+  <div class="metric-card">
+    <div class="metric-label">Beta</div>
+    <div class="metric-value">0.82</div>
+    <div class="metric-change">相对低波动</div>
+  </div>
+  <div class="metric-card">
+    <div class="metric-label">分析师评级</div>
+    <div class="metric-value">Buy</div>
+    <div class="metric-change">共识</div>
+  </div>
+</div>
+
+<p><strong>核心业务：</strong>Oklo 的商业模式是通过<strong>电力购买协议（PPA）</strong>绑定客户后，再向美国核管理委员会（NRC）申请建设许可。公司采购 HALEU（高含量低浓缩铀）燃料，由 Centrus Energy 供应，目标市场包括数据中心（AI算力爆发需求）、制造业、军事设施和政府设施。</p>
+
+<!-- SECTION 2: Aurora反应堆 -->
+<div class="section-title">
+  <span class="section-num">2</span>
+  核心产品：Aurora 反应堆
+</div>
+
+<div class="chart-grid single">
+  <div class="chart-container">
+    <div class="chart-title">Aurora SMR 技术参数与竞品对比</div>
+    <div id="chart0" style="height:300px"></div>
+  </div>
+</div>
+
+<table class="data-table">
+  <thead>
+    <tr>
+      <th>参数</th>
+      <th>数值</th>
+      <th>说明</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>热功率</td><td><strong>15 MW</strong></td><td>紧凑设计</td>
+    </tr>
+    <tr>
+      <td>电功率</td><td><strong>~5 MW</strong></td><td>热电转化效率约33%</td>
+    </tr>
+    <tr>
+      <td>堆型</td><td><strong>快中子反应堆</strong></td><td>金属燃料，液态钠冷却</td>
+    </tr>
+    <tr>
+      <td>燃料</td><td><strong>HALEU</strong></td><td>高含量低浓缩铀（Centrus供应）</td>
+    </tr>
+    <tr>
+      <td>换料周期</td><td><strong>10+ 年</strong></td><td>封闭燃料循环，长期无人值守</td>
+    </tr>
+    <tr>
+      <td>部署方式</td><td><strong>模块化</strong></td><td>工厂预制，运输至现场组装</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="alert-box">
+  <strong>NRC审批进度：</strong>Aurora 的预申请审查自2019年启动，至今未获得建设批准。SMR审批周期通常为10-15年，NuScale 曾获NRC批准但最终因成本问题取消项目。Oklo 目前仍处于预审阶段，尚无商业堆建成运营。
+</div>
+
+<table class="data-table">
+  <thead>
+    <tr>
+      <th>公司</th>
+      <th>技术</th>
+      <th>功率</th>
+      <th>进展</th>
+      <th>上市状态</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr class="highlight-red">
+      <td><strong>Oklo（OKLO）</strong></td><td>Aurora快堆</td><td>5 MW</td><td>NRC预审中</td><td><span class="badge nuclear" style="font-size:10px;padding:2px 8px">NYSE上市</span></td>
+    </tr>
+    <tr>
+      <td>NuScale</td><td>VOYGR</td><td>77 MW</td><td>NRC批准 → 项目取消</td><td><span class="badge orange" style="font-size:10px;padding:2px 8px">已破产</span></td>
+    </tr>
+    <tr>
+      <td>TerraPower</td><td>Natrium</td><td>345 MW</td><td>建设中（预计2028）</td><td>私企（盖茨）</td>
+    </tr>
+    <tr>
+      <td>GE Vernova</td><td>BWRX-300</td><td>300 MW</td><td>波兰/加拿大推进中</td><td><span class="badge blue" style="font-size:10px;padding:2px 8px">NYSE上市</span></td>
+    </tr>
+    <tr>
+      <td>X-energy</td><td>Xe-100</td><td>80MW×4</td><td>NRC预审中</td><td>私企</td>
+    </tr>
+    <tr>
+      <td>中核集团</td><td>ACP100</td><td>125 MW</td><td>国内已核准</td><td>国企</td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- SECTION 3: 财务分析 -->
+<div class="section-title">
+  <span class="section-num">3</span>
+  财务分析 — 零营收，消耗加速
+</div>
+
+<div class="alert-box">
+  <strong>核心警告：</strong>Oklo 自成立以来<strong>零营收</strong>，所有财务数据均反映开发成本、利息收入和现金消耗。公司完全依赖资本市场维持运营。
+</div>
+
+<div class="chart-grid">
+  <div class="chart-container">
+    <div class="chart-title">营业亏损 vs 利息收入（百万美元）</div>
+    <div id="chart1"></div>
+  </div>
+  <div class="chart-container">
+    <div class="chart-title">自由现金流消耗（百万美元）</div>
+    <div id="chart2"></div>
+  </div>
+</div>
+
+<table class="data-table">
+  <thead>
+    <tr>
+      <th>指标</th>
+      <th>FY2025</th>
+      <th>FY2024</th>
+      <th>FY2023</th>
+      <th>FY2022</th>
+      <th>FY2021</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>营业收入</td><td>$0</td><td>$0</td><td>$0</td><td>$0</td><td>$0</td>
+    </tr>
+    <tr>
+      <td>营业费用</td><td>$139.3M</td><td>$52.8M</td><td>$18.6M</td><td>$1.8M</td><td>$1.2M</td>
+    </tr>
+    <tr class="highlight-red">
+      <td>营业亏损</td><td><strong>-$139.3M</strong></td><td>-$52.8M</td><td>-$18.6M</td><td>-$1.8M</td><td>-$1.2M</td>
+    </tr>
+    <tr>
+      <td>利息收入</td><td>$29.1M</td><td>$7.7M</td><td>$0.2M</td><td>$7.3M</td><td>$0.1M</td>
+    </tr>
+    <tr class="highlight-red">
+      <td>净利润</td><td><strong>-$105.7M</strong></td><td>-$73.6M</td><td>-$32.2M</td><td>+$3.9M</td><td>-$1.1M</td>
+    </tr>
+    <tr>
+      <td>EPS（摊薄）</td><td>-$0.72</td><td>-$0.74</td><td>-$0.47</td><td>-$0.15</td><td>-$0.03</td>
+    </tr>
+    <tr class="highlight-red">
+      <td>自由现金流</td><td><strong>-$115.4M</strong></td><td>-$38.7M</td><td>-$16.1M</td><td>-$1.0M</td><td>-$1.9M</td>
+    </tr>
+    <tr>
+      <td>流通股</td><td>146.4M</td><td>98.9M</td><td>68.9M</td><td>68.0M</td><td>35.2M</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>关键特征：</strong></p>
+<ul style="margin:0 0 16px 20px;color:#444;line-height:2.1">
+  <li><strong>现金消耗3年增长7倍：</strong>FCF从2023年-$16M → 2024年-$39M → 2025年-$115M，随开发加速而恶化</li>
+  <li><strong>利息收入是最大"收入"来源：</strong>$29.1M（2025年）来自美联储高利率环境下的现金储备投资收益，利率下行将直接减少该收入</li>
+  <li><strong>流通股2年稀释152%：</strong>从68.9M（2023年）增至173.6M（当前），EPS持续摊薄</li>
+  <li><strong>资产负债表健康：</strong>现金$1.23B vs 负债$1.45M，净现金$1.23B（$7.07/股）</li>
+</ul>
+
+<!-- SECTION 4: 股价走势 -->
+<div class="section-title">
+  <span class="section-num">4</span>
+  股价走势 — 从$5到$193，再到$48
+</div>
+
+<div class="chart-container">
+  <div class="chart-title">月K线走势（2023-2026）— $5.35低点 → $193.84历史高点 → 当前$48</div>
+  <div id="chart3" style="height:340px"></div>
+</div>
+
+<div class="risk-grid">
+  <div class="risk-card blue">
+    <div class="risk-title"><div class="risk-dot"></div>2024年10月 — DOE催化</div>
+    <div class="risk-desc">美国能源部宣布$11.9B SMR贷款计划 → 股价从$8飙升至$22</div>
+  </div>
+  <div class="risk-card blue">
+    <div class="risk-title"><div class="risk-dot"></div>2025年1月 — AI需求爆发</div>
+    <div class="risk-desc">AI数据中心用电需求激增，核能作为清洁基荷电源 → 概念股普涨</div>
+  </div>
+  <div class="risk-card orange">
+    <div class="risk-title"><div class="risk-dot"></div>2025年10月 — 顶点$193.84</div>
+    <div class="risk-desc">AI热潮+核能复兴叙事+散户炒作 → 极度非理性高点</div>
+  </div>
+  <div class="risk-card red">
+    <div class="risk-title"><div class="risk-dot"></div>2025年12月+ — 现实检验</div>
+    <div class="risk-desc">无NRC批准、无收入、无正式PPA → 利润兑现 → 股价较高点暴跌75%</div>
+  </div>
+  <div class="risk-card green">
+    <div class="risk-title"><div class="risk-dot"></div>当前 $48 — 仍溢价</div>
+    <div class="risk-desc">较IPO仍涨378%，但85%股价为"梦想估值"，无基本面支撑</div>
+  </div>
+  <div class="risk-card blue">
+    <div class="risk-title"><div class="risk-dot"></div>2026年5月12日 — 下次财报</div>
+    <div class="risk-desc">关注：NRC进展更新、DOE贷款承诺进度、现金消耗指引</div>
+  </div>
+</div>
+
+<!-- SECTION 5: 竞争格局 -->
+<div class="section-title">
+  <span class="section-num">5</span>
+  竞争格局与签约客户
+</div>
+
+<p>Oklo 的竞争优势在于：<strong>美国市场唯一上市的SMR纯概念股</strong>，同时具备先发优势和灵活的体量（5MW级）。但面临以下挑战：</p>
+
+<ul style="margin:0 0 16px 20px;color:#444;line-height:2.1">
+  <li><strong>NuScale破产的警示：</strong>即便获得NRC批准，建设成本超支仍可导致项目取消</li>
+  <li><strong>中国领先：</strong>中核ACP100已在国内获得商业化核准，进度领先</li>
+  <li><strong>GE Vernova规模化优势：</strong>BWRX-300 300MW机组在波兰、加拿大已有明确部署时间表</li>
+</ul>
+
+<p><strong>签约客户（均为意向书，非正式PPA）：</strong></p>
+<table class="data-table">
+  <thead>
+    <tr>
+      <th>客户</th>
+      <th>地点</th>
+      <th>规模</th>
+      <th>状态</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Diamond Energy</td><td>美国</td><td>2座 Aurora</td><td><span class="badge gray" style="font-size:10px;padding:2px 8px">意向书</span></td>
+    </tr>
+    <tr>
+      <td>Switch（数据中心）</td><td>内华达</td><td>12座 Aurora</td><td><span class="badge gray" style="font-size:10px;padding:2px 8px">意向书</span></td>
+    </tr>
+    <tr>
+      <td>One Power</td><td>阿拉斯加</td><td>1座 Aurora</td><td><span class="badge gray" style="font-size:10px;padding:2px 8px">意向书</span></td>
+    </tr>
+    <tr>
+      <td>Raw Water</td><td>德克萨斯</td><td>1座 Aurora</td><td><span class="badge gray" style="font-size:10px;padding:2px 8px">意向书</span></td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="alert-box">
+  <strong>重要提示：</strong>以上均为<strong>意向书（LOI）</strong>，无法律约束力，转化为正式PPA的概率极低。在评估公司前景时，<strong>不应将LOI视为有效合同</strong>。
+</div>
+
+<!-- SECTION 6: 估值 -->
+<div class="section-title">
+  <span class="section-num">6</span>
+  估值分析 — 85%为"梦想溢价"
+</div>
+
+<div class="chart-grid">
+  <div class="chart-container">
+    <div class="chart-title">股价构成：现金底（$7.07）vs 梦想溢价（$41）</div>
+    <div id="chart4" style="height:300px"></div>
+  </div>
+  <div class="chart-container">
+    <div class="metric-grid" style="grid-template-columns:1fr 1fr">
+      <div class="metric-card">
+        <div class="metric-label">总市值</div>
+        <div class="metric-value">$8.34B</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">现金储备</div>
+        <div class="metric-value">$1.23B</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">每股净现金</div>
+        <div class="metric-value">$7.07</div>
+      </div>
+      <div class="metric-card" style="background:#FFF3F0;border:1px solid #FFCDD2">
+        <div class="metric-label" style="color:var(--up)">梦想溢价/股</div>
+        <div class="metric-value" style="color:var(--up)">$41.00</div>
+        <div class="metric-change up">占股价85%</div>
+      </div>
+    </div>
+    <div class="alert-box" style="margin-top:12px">
+      <strong>核心结论：</strong>当前$48股价中，仅<strong>$7.07（14.7%）</strong>有硬资产（现金）支撑。其余<strong>$41（85%）</strong>完全是对 Aurora 商业化的远期预期。
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 7: 风险 -->
+<div class="section-title">
+  <span class="section-num">7</span>
+  风险矩阵
+</div>
+
+<div class="risk-grid">
+  <div class="risk-card red">
+    <div class="risk-title"><div class="risk-dot"></div>🔴 NRC审批不确定性（最高）</div>
+    <div class="risk-desc">
+      <ul>
+        <li>预审自2019年至今未获批</li>
+        <li>SMR审批周期通常10-15年</li>
+        <li>NuScale获批仍取消项目</li>
+      </ul>
+    </div>
+  </div>
+  <div class="risk-card red">
+    <div class="risk-title"><div class="risk-dot"></div>🔴 成本居高不下</div>
+    <div class="risk-desc">
+      <ul>
+        <li>SMR实际成本通常超预算3-5倍</li>
+        <li>无商业堆数据验证成本</li>
+        <li>每kWh成本未经验证</li>
+      </ul>
+    </div>
+  </div>
+  <div class="risk-card red">
+    <div class="risk-title"><div class="risk-dot"></div>🔴 竞争加剧</div>
+    <div class="risk-desc">
+      <ul>
+        <li>中国ACP100已获国内核准</li>
+        <li>GE Vernova推进更快</li>
+        <li>美国本土无绝对领先优势</li>
+      </ul>
+    </div>
+  </div>
+  <div class="risk-card orange">
+    <div class="risk-title"><div class="risk-dot"></div>🟡 利率下行压力</div>
+    <div class="risk-desc">
+      <ul>
+        <li>$29.1M利息收入来自高利率环境</li>
+        <li>每降息100bp ≈ 减少$12M年收入</li>
+        <li>现金消耗速度将被动加快</li>
+      </ul>
+    </div>
+  </div>
+  <div class="risk-card orange">
+    <div class="risk-title"><div class="risk-dot"></div>🟡 股权持续稀释</div>
+    <div class="risk-desc">
+      <ul>
+        <li>流通股2年增加152%</li>
+        <li>DOE贷款可能需进一步稀释</li>
+        <li>EPS持续摊薄无解</li>
+      </ul>
+    </div>
+  </div>
+  <div class="risk-card green">
+    <div class="risk-title"><div class="risk-dot"></div>🟢 现金充裕（正面）</div>
+    <div class="risk-desc">
+      <ul>
+        <li>$1.23B现金，按当前速度可维持8-10年</li>
+        <li>DOE $11.9B贷款计划降低融资依赖</li>
+        <li>负债仅$1.45M，灵活度高</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 8: 投资建议 -->
+<div class="section-title">
+  <span class="section-num">8</span>
+  综合投资建议
+</div>
+
+<div class="verdict-box">
+  <div class="verdict-title">综合评级：高度投机（2/5星）</div>
+  <div class="verdict-text">
+    OKLO 是美国市场唯一的<strong>上市SMR概念 pre-revenue 股</strong>，当前$8.34B市值对应<strong>$0营收</strong>、<strong>$115M年现金消耗</strong>，股价85%为"梦想估值"。2025年从$5.35涨至$193（+3523%）又跌回$48（-75%），是典型的情绪驱动型股票。<strong>不适合保守型投资者。</strong>
+  </div>
+  <div class="verdict-actions">
+    <div class="action-card">
+      <div class="action-label">短线（&lt;6个月）</div>
+      <div class="action-value" style="color:#EF9A9A">回避</div>
+      <div class="action-note">无近期催化因素，风险收益比不优</div>
+    </div>
+    <div class="action-card">
+      <div class="action-label">中线（6-18个月）</div>
+      <div class="action-value" style="color:#FFD54F">关注 $25-60</div>
+      <div class="action-note">盯5月12日财报：NRC更新、DOE贷款进度、现金消耗指引。止损$35</div>
+    </div>
+    <div class="action-card">
+      <div class="action-label">长线（3年+）</div>
+      <div class="action-value" style="color:#A5D6A7">逻辑成立概率&lt;20%</div>
+      <div class="action-note">NRC批准+2-3个正式PPA → 目标$150+。仓位不超过组合2-5%</div>
+    </div>
+  </div>
+</div>
+
+<table class="data-table">
+  <thead>
+    <tr>
+      <th>评估维度</th>
+      <th>评分</th>
+      <th>说明</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>业务质地</td>
+      <td><span class="stars">★★☆☆☆</span></td>
+      <td>SMR概念纯正，但无实质产品、无收入</td>
+    </tr>
+    <tr>
+      <td>技术进展</td>
+      <td><span class="stars">★★☆☆☆</span></td>
+      <td>NRC预审自2019年，无商业堆落地</td>
+    </tr>
+    <tr>
+      <td>财务健康</td>
+      <td><span class="stars">★★★★☆</span></td>
+      <td>$1.23B现金、近零负债，但消耗加速</td>
+    </tr>
+    <tr>
+      <td>估值合理性</td>
+      <td><span class="stars">☆☆☆☆☆</span></td>
+      <td>$8.34B市值对应$0营收，85%为梦想溢价</td>
+    </tr>
+    <tr>
+      <td>竞争地位</td>
+      <td><span class="stars">★★☆☆☆</span></td>
+      <td>上市优势，但中国/GE Vernova领先</td>
+    </tr>
+    <tr class="highlight-red">
+      <td><strong>综合</strong></td>
+      <td><span class="stars">★★☆☆☆</span></td>
+      <td><strong>不适合保守型投资者</strong></td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="alert-box">
+  <strong>关键跟踪指标：</strong>① NRC Aurora预审决定更新；② DOE $11.9B贷款正式承诺；③ 首个有约束力的正式PPA签署（非意向书）。以上三者任一出现即为重要催化，否则无实质买入理由。
+</div>
+
+<!-- FOOTER -->
+<div class="report-footer">
+  <div>
+    <strong>数据来源：</strong>
+    [1] Yahoo Finance (OKLO) · [2] StockAnalysis.com · [3] SEC EDGAR (CIK: 1849056) · [4] Oklo官网 · [5] Seeking Alpha · [6] Benzinga
+  </div>
+  <div>
+    由 Minis AI · 深度研究 Skill 生成 · 2026.04.02
+  </div>
+</div>
+
+</div><!-- /content -->
+
+<script>
+// ====== CHART 0: SMR竞品对比 ======
+var chart0 = echarts.init(document.getElementById('chart0'));
+var option0 = {
+  tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+  legend: { data: ['电功率 (MW)', 'NRC审批年限'], top: 5 },
+  grid: { left: '3%', right: '4%', bottom: '12%', top: '15%', containLabel: true },
+  xAxis: { type: 'category', data: ['Oklo\nAurora', 'NuScale\nVOYGR', 'TerraPower\nNatrium', 'GE Vernova\nBWRX-300', 'X-energy\nXe-100', '中核\nACP100'], axisLabel: { fontSize: 11 } },
+  yAxis: [
+    { type: 'value', name: 'MW', nameTextStyle: { fontSize: 11 }, axisLabel: { fontSize: 11 } },
+    { type: 'value', name: 'NRC年', nameTextStyle: { fontSize: 11 }, axisLabel: { fontSize: 11 } }
+  ],
+  series: [
+    { name: '电功率 (MW)', type: 'bar', data: [5, 77, 345, 300, 320, 125], itemStyle: { color: '#1565C0' }, barWidth: '30%', label: { show: true, position: 'top', fontSize: 10, formatter: '{c}MW' } },
+    { name: 'NRC审批年限', type: 'bar', yAxisIndex: 1, data: [7, 0, -1, 2, 3, -2], itemStyle: { color: function(p){ if(p.data===0) return '#E53935'; if(p.data===-1) return '#9E9E9E'; if(p.data===-2) return '#43A047'; return '#F57C00'; }}, barWidth: '30%', label: { show: true, position: 'top', fontSize: 10, formatter: function(p){ if(p.data===0) return '批准→取消'; if(p.data===-1) return '建设中'; if(p.data===-2) return '已核准'; return p.data+'年'; }}
+    }
+  ]
+};
+chart0.setOption(option0);
+
+// ====== CHART 1: 营业亏损 vs 利息收入 ======
+var chart1 = echarts.init(document.getElementById('chart1'));
+var option1 = {
+  tooltip: { trigger: 'axis' },
+  legend: { data: ['营业亏损', '利息收入'], top: 5 },
+  grid: { left: '3%', right: '4%', bottom: '10%', top: '15%', containLabel: true },
+  xAxis: { type: 'category', data: ['FY2021', 'FY2022', 'FY2023', 'FY2024', 'FY2025'] },
+  yAxis: { type: 'value', name: '百万美元', axisLabel: { formatter: '${value}M' } },
+  series: [
+    { name: '营业亏损', type: 'bar', data: [-1.2, -1.8, -18.6, -52.8, -139.3], itemStyle: { color: '#E53935' }, label: { show: true, position: 'top', fontSize: 10, formatter: '-${Math.abs(v.value)}M' } },
+    { name: '利息收入', type: 'bar', data: [0.1, 7.3, 0.2, 7.7, 29.1], itemStyle: { color: '#43A047' }, label: { show: true, position: 'top', fontSize: 10, formatter: '+${value}M' } }
+  ]
+};
+chart1.setOption(option1);
+
+// ====== CHART 2: FCF消耗 ======
+var chart2 = echarts.init(document.getElementById('chart2'));
+var option2 = {
+  tooltip: { trigger: 'axis' },
+  grid: { left: '3%', right: '4%', bottom: '10%', top: '10%', containLabel: true },
+  xAxis: { type: 'category', data: ['FY2021', 'FY2022', 'FY2023', 'FY2024', 'FY2025'] },
+  yAxis: { type: 'value', name: '百万美元', axisLabel: { formatter: '-${value}M' } },
+  series: [{
+    type: 'bar',
+    data: [-1.9, -1.0, -16.1, -38.7, -115.4],
+    itemStyle: { color: function(p){ if(p.data <= -100) return '#B71C1C'; if(p.data <= -30) return '#E53935'; if(p.data <= -10) return '#F57C00'; return '#F9A825'; }},
+    label: { show: true, position: 'top', fontSize: 10, formatter: '-${Math.abs(v.value)}M' }
+  }]
+};
+chart2.setOption(option2);
+
+// ====== CHART 3: 月K线 ======
+var chart3 = echarts.init(document.getElementById('chart3'));
+var priceData = [
+  ['2023-05', 10.69], ['2023-06', 10.43], ['2023-07', 10.33], ['2023-08', 10.36],
+  ['2023-09', 10.35], ['2023-10', 10.32], ['2023-11', 10.35], ['2023-12', 10.56],
+  ['2024-01', 11.12], ['2024-02', 10.64], ['2024-03', 11.42], ['2024-04', 13.74],
+  ['2024-05', 10.07], ['2024-06', 8.47], ['2024-07', 9.10], ['2024-08', 5.97],
+  ['2024-09', 8.09], ['2024-10', 22.46], ['2024-11', 23.54], ['2024-12', 21.23],
+  ['2025-01', 41.61], ['2025-02', 33.39], ['2025-03', 21.63], ['2025-04', 23.74],
+  ['2025-05', 52.72], ['2025-06', 55.99], ['2025-07', 76.59], ['2025-08', 73.64],
+  ['2025-09', 111.63], ['2025-10', 132.77], ['2025-11', 91.38], ['2025-12', 71.76],
+  ['2026-01', 79.62], ['2026-02', 62.95], ['2026-03', 49.59], ['2026-04', 48.07]
+];
+var option3 = {
+  tooltip: { trigger: 'axis' },
+  grid: { left: '3%', right: '4%', bottom: '14%', top: '10%', containLabel: true },
+  xAxis: { type: 'category', data: priceData.map(d => d[0]), axisLabel: { rotate: 45, fontSize: 10, interval: 2 } },
+  yAxis: {
+    type: 'value', name: '$',
+    axisLabel: { formatter: '${value}' },
+    markLine: {
+      data: [
+        { yAxis: 193.84, name: '历史高点 $193.84', lineStyle: { color: '#E53935', type: 'dashed', width: 1.5 }, label: { formatter: 'ATH $193.84', position: 'insideEndTop', fontSize: 10, color: '#E53935' } },
+        { yAxis: 48.07, name: '当前 $48.07', lineStyle: { color: '#1565C0', type: 'dashed', width: 1.5 }, label: { formatter: '当前 $48', position: 'insideEndTop', fontSize: 10, color: '#1565C0' } },
+        { yAxis: 5.35, name: '52W低点 $5.35', lineStyle: { color: '#43A047', type: 'dashed', width: 1 }, label: { formatter: '低 $5.35', position: 'insideEndBottom', fontSize: 10, color: '#43A047' } }
+      ]
+    }
+  },
+  series: [{
+    type: 'line',
+    data: priceData.map(d => d[1]),
+    smooth: true,
+    lineStyle: { width: 2.5, color: '#1565C0' },
+    areaStyle: {
+      color: {
+        type: 'linear', x: 0, y: 0, x2: 0, y2: 1,
+        colorStops: [
+          { offset: 0, color: 'rgba(21,101,192,0.28)' },
+          { offset: 1, color: 'rgba(21,101,192,0.02)' }
+        ]
+      }
+    },
+    itemStyle: { color: '#1565C0' },
+    markArea: {
+      data: [
+        [{ xAxis: '2024-09', itemStyle: { color: 'rgba(69,160,75,0.08)' } }, { xAxis: '2025-02' }]
+      ],
+      label: { formatter: 'DOE+AI 热潮', fontSize: 10, color: '#43A047' }
+    }
+  }]
+};
+chart3.setOption(option3);
+
+// ====== CHART 4: 股价构成饼图 ======
+var chart4 = echarts.init(document.getElementById('chart4'));
+var option4 = {
+  tooltip: { trigger: 'item', formatter: '{b}: ${c} ({d}%)' },
+  legend: { orient: 'vertical', right: '3%', top: 'center', textStyle: { fontSize: 13 } },
+  series: [{
+    type: 'pie',
+    radius: ['35%', '65%'],
+    center: ['38%', '50%'],
+    data: [
+      { value: 7.07, name: '现金底 ($7.07)', itemStyle: { color: '#43A047' } },
+      { value: 41.00, name: '梦想溢价 ($41.00)', itemStyle: { color: '#F57C00' } }
+    ],
+    label: { formatter: '{b}\n${c} ({d}%)', fontSize: 13, fontWeight: 'bold', lineHeight: 22 },
+    labelLine: { show: true },
+    emphasis: { itemStyle: { shadowBlur: 10, shadowOffsetX: 0, shadowColor: 'rgba(0,0,0,0.3)' } }
+  }]
+};
+chart4.setOption(option4);
+
+// ====== Resize ======
+window.addEventListener('resize', function() {
+  chart0.resize(); chart1.resize(); chart2.resize(); chart3.resize(); chart4.resize();
+});
+</script>
+</body>
+</html>
