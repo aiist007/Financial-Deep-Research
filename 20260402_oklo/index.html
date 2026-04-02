@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Oklo Inc. (OKLO) Deep Research | 2026.04.02</title>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+<style>
+:root {
+  --bg-page: #FFFFFF;
+  --bg-card: #F8F8F8;
+  --bg-header: #0D1B2A;
+  --text-primary: #1A1A2E;
+  --text-secondary: #5C6370;
+  --text-light: #FFFFFF;
+  --up: #E53935;
+  --down: #43A047;
+  --neutral: #757575;
+  --accent: #1565C0;
+  --accent2: #0288D1;
+  --warning: #E65100;
+  --border: #E0E0E0;
+  --nuclear: #F57C00;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--bg-page);
+  color: var(--text-primary);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  max-width: 1100px;
+  margin: 0 auto;
+  line-height: 1.7;
+  font-size: 15px;
+  padding-bottom: 60px;
+}
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* Header */
+.report-header {
+  background: var(--bg-header);
+  color: var(--text-light);
+  padding: 44px 52px;
+  border-bottom: 5px solid var(--nuclear);
+  position: relative;
+}
+.report-header::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: linear-gradient(135deg, #0D1B2A 0%, #1B3A4B 50%, #0D1B2A 100%);
+}
+.report-header > * { position: relative; z-index: 1; }
+.report-header .badge-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+.badge {
+  background: var(--nuclear);
+  color: white;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 3px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+.badge.blue { background: var(--accent); }
+.badge.red { background: var(--up); }
+.badge.green { background: var(--down); }
+.badge.orange { background: var(--warning); }
+.report-title {
+  font-size: 30px;
+  font-weight: 800;
+  margin-bottom: 8px;
+  letter-spacing: -0.5px;
+  color: #FFFFFF;
+}
+.report-subtitle {
+  font-size: 15px;
+  opacity: 0.75;
+  margin-bottom: 20px;
+}
+.report-meta {
+  font-size: 13px;
+  opacity: 0.65;
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+/* Price bar */
+.price-bar {
+  background: linear-gradient(90deg, #0D1B2A 0%, #1B3A4B 100%);
+  padding: 24px 52px;
+  display: flex;
+  gap: 36px;
+  align-items: center;
+  flex-wrap: wrap;
+  border-bottom: 2px solid var(--border);
+}
+.price-item { display: flex; flex-direction: column; }
+.price-label {
+  font-size: 11px;
+  color: rgba(255,255,255,0.55);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+.price-value {
+  font-size: 20px;
+  font-weight: 800;
+  color: #FFFFFF;
+}
+.price-value.up { color: #EF5350; }
+.price-value.down { color: #66BB6A; }
+.price-value.highlight { color: #FFD54F; }
+.price-divider {
+  width: 1px;
+  height: 36px;
+  background: rgba(255,255,255,0.15);
+}
+
+/* Content */
+.content { padding: 0 52px; }
+.section-title {
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 44px 0 20px 0;
+  padding-bottom: 12px;
+  border-bottom: 3px solid var(--accent);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.section-num {
+  background: var(--accent);
+  color: white;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 3px;
+  min-width: 28px;
+  text-align: center;
+}
+p { margin-bottom: 14px; color: #333; line-height: 1.8; }
+strong { color: var(--text-primary); }
+em { color: var(--accent); font-style: normal; font-weight: 600; }
+
+/* Metric cards */
+.metric-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
+  margin: 20px 0 28px;
+}
+.metric-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 18px 20px;
+}
+.metric-label {
+  font-size: 11px;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+}
+.metric-value {
+  font-size: 22px;
+  font-weight: 800;
+  margin-bottom: 4px;
+}
+.metric-change { font-size: 13px; font-weight: 600; }
+.metric-change.up { color: var(--up); }
+.metric-change.down { color: var(--down); }
+
+/* Tables */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 16px 0 24px;
+  font-size: 14px;
+}
+.data-table th {
+  background: var(--bg-header);
+  color: white;
+  padding: 12px 16px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.data-table td {
+  padding: 11px 16px;
+  border-bottom: 1px solid var(--border);
+  text-align: right;
+}
+.data-table td:first-child { text-align: left; }
+.data-table tr:nth-child(even) td { background: #FAFAFA; }
+.data-table tr:hover td { background: #EEF4FF; }
+.data-table .highlight-red td { background: #FFF3F0 !important; color: var(--up); font-weight: 700; }
+.data-table .highlight-green td { background: #F0FFF4 !important; }
+
+/* Chart containers */
+.chart-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin: 20px 0 28px;
+}
+.chart-grid.single { grid-template-columns: 1fr; }
+.chart-container {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+.chart-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 16px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--border);
+}
+#chart1, #chart2, #chart3, #chart4 {
+  width: 100%;
+  height: 320px;
+}
+
+/* Risk cards */
+.risk-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin: 20px 0 28px;
+}
+.risk-card {
+  border-radius: 10px;
+  padding: 20px;
+  border-left: 4px solid;
+}
+.risk-card.red { background: #FFF8F6; border-color: var(--up); }
+.risk-card.orange { background: #FFF8F0; border-color: var(--warning); }
+.risk-card.green { background: #F0FFF4; border-color: var(--down); }
+.risk-card.blue { background: #EEF4FF; border-color: var(--accent); }
+.risk-title {
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.risk-card.red .risk-title { color: var(--up); }
+.risk-card.orange .risk-title { color: var(--warning); }
+.risk-card.green .risk-title { color: var(--down); }
+.risk-card.blue .risk-title { color: var(--accent); }
+.risk-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+}
+.risk-card.red .risk-dot { background: var(--up); }
+.risk-card.orange .risk-dot { background: var(--warning); }
+.risk-card.green .risk-dot { background: var(--down); }
+.risk-card.blue .risk-dot { background: var(--accent); }
+.risk-desc { font-size: 13px; color: #555; line-height: 1.6; }
+.risk-desc ul { margin: 8px 0 0 16px; }
+.risk-desc li { margin-bottom: 4px; }
+
+/* Verdict */
+.verdict-box {
+  background: var(--bg-header);
+  color: white;
+  border-radius: 12px;
+  padding: 28px 32px;
+  margin: 24px 0;
+}
+.verdict-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--nuclear);
+  margin-bottom: 16px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+.verdict-text {
+  font-size: 15px;
+  line-height: 1.8;
+  color: rgba(255,255,255,0.9);
+  margin-bottom: 20px;
+}
+.verdict-actions {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+.action-card {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 8px;
+  padding: 16px;
+}
+.action-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: rgba(255,255,255,0.5);
+  margin-bottom: 6px;
+}
+.action-value {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+.action-note { font-size: 12px; color: rgba(255,255,255,0.6); }
+
+/* Stars rating */
+.stars { color: #FFD700; letter-spacing: 2px; font-size: 18px; }
+
+/* Tags */
+.tag-list { display: flex; gap: 8px; flex-wrap: wrap; margin: 12px 0; }
+.tag {
+  background: #EEF4FF;
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 20px;
+  border: 1px solid #BBDEFB;
+}
+
+/* Alert box */
+.alert-box {
+  background: #FFF8E1;
+  border: 1px solid #FFE082;
+  border-left: 4px solid var(--warning);
+  border-radius: 6px;
+  padding: 14px 18px;
+  margin: 16px 0;
+  font-size: 14px;
+  color: #5D4037;
+}
+.alert-box strong { color: var(--warning); }
+
+/* Footer */
+.report-footer {
+  margin: 40px 52px 0;
+  padding: 20px 0;
+  border-top: 2px solid var(--border);
+  font-size: 12px;
+  color: var(--text-secondary);
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .report-header, .price-bar, .content, .report-footer { padding-left: 24px; padding-right: 24px; }
+  .chart-grid { grid-template-columns: 1fr; }
+  .risk-grid { grid-template-columns: 1fr; }
+  .verdict-actions { grid-template-columns: 1fr; }
+  .price-bar { gap: 20px; }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="report-header">
+  <div class="badge-row">
+    <span class="badge">NYSE: OKLO</span>
+    <span class="badge blue">Nuclear SMR</span>
+    <span class="badge red">Pre-Revenue</span>
+    <span class="badge orange">Speculative</span>
+  </div>
+  <div class="report-title">Oklo Inc. (OKLO)</div>
+  <div class="report-subtitle">Advanced Small Modular Reactor (SMR) — Aurora Nuclear Power Plant Developer</div>
+  <div class="report-meta">
+    <span>Research Date: 2026.04.02</span>
+    <span>Market Cap: $8.34B</span>
+    <span>Price: $48.07</span>
+    <span>Shares: 173.57M</span>
+    <span>Analyst: Buy | Target: $99.58</span>
+  </div>
+</div>
+
+<!-- PRICE BAR -->
+<div class="price-bar">
+  <div class="price-item">
+    <span class="price-label">Current Price</span>
+    <span class="price-value">$48.07</span>
+  </div>
+  <div class="price-divider"></div>
+  <div class="price-item">
+    <span class="price-label">Market Cap</span>
+    <span class="price-value">$8.34B</span>
+  </div>
+  <div class="price-divider"></div>
+  <div class="price-item">
+    <span class="price-label">52W High</span>
+    <span class="price-value highlight">$193.84</span>
+  </div>
+  <div class="price-divider"></div>
+  <div class="price-item">
+    <span class="price-label">52W Low</span>
+    <span class="price-value">$5.35</span>
+  </div>
+  <div class="price-divider"></div>
+  <div class="price-item">
+    <span class="price-label">Cash Reserve</span>
+    <span class="price-value highlight">$1.23B</span>
+  </div>
+  <div class="price-divider"></div>
+  <div class="price-item">
+    <span class="price-label">Cash/Share</span>
+    <span class="price-value">$7.07</span>
+  </div>
+  <div class="price-divider"></div>
+  <div class="price-item">
+    <span class="price-label">Analyst Target</span>
+    <span class="price-value up">$99.58</span>
+  </div>
+</div>
+
+<!-- CONTENT -->
+<div class="content">
+
+<!-- ONE-SENTENCE VERDICT -->
+<div class="verdict-box">
+  <div class="verdict-title">One-Sentence Verdict</div>
+  <div class="verdict-text">
+    Oklo is the <strong style="color:#FFD54F">only pure-play listed SMR concept stock</strong> in the US — with $8.34B market cap against <strong style="color:#FFD54F">$0 revenue</strong>, $115M annual cash burn, and $1.23B cash runway for ~10 years; the stock surged +3523% to $193 in Oct 2025 then crashed to $48, with 85% of current price being "dream premium" on Aurora NRC approval that has been pending since 2019.
+  </div>
+</div>
+
+<!-- SECTION 1: COMPANY OVERVIEW -->
+<div class="section-title">
+  <span class="section-num">1</span>
+  Company Overview & Business Model
+</div>
+
+<p><strong>Oklo Inc.</strong> is an advanced nuclear energy company developing the <strong style="color:var(--accent)">Aurora Small Modular Reactor (SMR)</strong>. Founded in 2013, Oklo went public via SPAC merger with AltC Acquisition Corp. in July 2021. The company has <strong>zero revenue to date</strong> — it is purely a pre-revenue development-stage company with all value derived from future Aurora commercialization prospects.</p>
+
+<div class="metric-grid">
+  <div class="metric-card">
+    <div class="metric-label">IPO Date</div>
+    <div class="metric-value">Jul 2021</div>
+    <div class="metric-change">via AltC SPAC</div>
+  </div>
+  <div class="metric-card">
+    <div class="metric-label">IPO Price</div>
+    <div class="metric-value">$10.05</div>
+    <div class="metric-change up">+378% vs $48</div>
+  </div>
+  <div class="metric-card">
+    <div class="metric-label">Employees</div>
+    <div class="metric-value">~150</div>
+    <div class="metric-change">Small team</div>
+  </div>
+  <div class="metric-card">
+    <div class="metric-label">Revenue</div>
+    <div class="metric-value">$0</div>
+    <div class="metric-change down">Pre-revenue</div>
+  </div>
+  <div class="metric-card">
+    <div class="metric-label">Beta</div>
+    <div class="metric-value">0.82</div>
+    <div class="metric-change">Low volatility</div>
+  </div>
+  <div class="metric-card">
+    <div class="metric-label">Net Cash/Share</div>
+    <div class="metric-value">$7.07</div>
+    <div class="metric-change">14.7% of price</div>
+  </div>
+</div>
+
+<div class="chart-grid single">
+  <div class="chart-container">
+    <div class="chart-title">Aurora SMR — Key Specs vs Competitors</div>
+    <div id="chart0" style="height:280px"></div>
+  </div>
+</div>
+
+<!-- SECTION 2: FINANCIAL ANALYSIS -->
+<div class="section-title">
+  <span class="section-num">2</span>
+  Financial Analysis — Zero Revenue, Accelerating Burn
+</div>
+
+<div class="alert-box">
+  <strong>Key Warning:</strong> Oklo has generated <strong>$0 in revenue</strong> since inception. All financials reflect development costs, interest income, and cash burn. The company is entirely dependent on capital markets for survival.
+</div>
+
+<div class="chart-grid">
+  <div class="chart-container">
+    <div class="chart-title">Operating Loss vs Interest Income ($M)</div>
+    <div id="chart1"></div>
+  </div>
+  <div class="chart-container">
+    <div class="chart-title">Cash Burn Rate — FCF ($M)</div>
+    <div id="chart2"></div>
+  </div>
+</div>
+
+<table class="data-table">
+  <thead>
+    <tr>
+      <th>Metric</th>
+      <th>FY2025</th>
+      <th>FY2024</th>
+      <th>FY2023</th>
+      <th>FY2022</th>
+      <th>FY2021</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Revenue</td><td>$0</td><td>$0</td><td>$0</td><td>$0</td><td>$0</td>
+    </tr>
+    <tr>
+      <td>Operating Expenses</td><td>$139.3M</td><td>$52.8M</td><td>$18.6M</td><td>$1.8M</td><td>$1.2M</td>
+    </tr>
+    <tr class="highlight-red">
+      <td>Operating Loss</td><td><strong>-$139.3M</strong></td><td>-$52.8M</td><td>-$18.6M</td><td>-$1.8M</td><td>-$1.2M</td>
+    </tr>
+    <tr>
+      <td>Interest Income</td><td>$29.1M</td><td>$7.7M</td><td>$0.2M</td><td>$7.3M</td><td>$0.1M</td>
+    </tr>
+    <tr class="highlight-red">
+      <td>Net Income</td><td><strong>-$105.7M</strong></td><td>-$73.6M</td><td>-$32.2M</td><td>+$3.9M</td><td>-$1.1M</td>
+    </tr>
+    <tr>
+      <td>EPS (Diluted)</td><td>-$0.72</td><td>-$0.74</td><td>-$0.47</td><td>-$0.15</td><td>-$0.03</td>
+    </tr>
+    <tr class="highlight-red">
+      <td>Free Cash Flow</td><td><strong>-$115.4M</strong></td><td>-$38.7M</td><td>-$16.1M</td><td>-$1.0M</td><td>-$1.9M</td>
+    </tr>
+    <tr>
+      <td>Shares Outstanding</td><td>146.4M</td><td>98.9M</td><td>68.9M</td><td>68.0M</td><td>35.2M</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>Critical observations:</strong></p>
+<ul style="margin:0 0 16px 20px;color:#444;line-height:2">
+  <li><strong>Cash burn accelerating 7x in 3 years:</strong> FCF went from -$16M (2023) → -$39M (2024) → -$115M (2025) — burn rate is surging as development accelerates</li>
+  <li><strong>Interest income partially offsets:</strong> $29.1M in 2025 from cash reserves — but this disappears when Fed cuts rates</li>
+  <li><strong>Extreme share dilution:</strong> Float grew 68.9M (2023) → 173.6M (current), +152% in 2 years — massive EPS dilution</li>
+  <li><strong>Net cash position:</strong> $1.23B cash vs only $1.45M debt — balance sheet is healthy but burning fast</li>
+  <li><strong>Break-even unknown:</strong> No clear path to first revenue or operating breakeven</li>
+</ul>
+
+<!-- SECTION 3: STOCK PRICE HISTORY -->
+<div class="section-title">
+  <span class="section-num">3</span>
+  Stock Price — From $5 to $193, Now Back to $48
+</div>
+
+<div class="chart-container">
+  <div class="chart-title">Monthly Price History (2023-2026) — $5.35 Low → $193.84 ATH → $48 Current</div>
+  <div id="chart3"></div>
+</div>
+
+<div class="risk-grid">
+  <div class="risk-card blue">
+    <div class="risk-title"><div class="risk-dot"></div>Oct 2024 — DOE Catalyst</div>
+    <div class="risk-desc">DOE announced $11.9B loan program for SMR → stock surged from $8 to $22</div>
+  </div>
+  <div class="risk-card blue">
+    <div class="risk-title"><div class="risk-dot"></div>Jan 2025 — AI Demand Surge</div>
+    <div class="risk-desc">AI data center power demand → nuclear baseload thesis → stock exploded</div>
+  </div>
+  <div class="risk-card orange">
+    <div class="risk-title"><div class="risk-dot"></div>Oct 2025 — ATH $193.84</div>
+    <div class="risk-desc">Peak speculative frenzy: AI + nuclear + meme stock momentum = irrational high</div>
+  </div>
+  <div class="risk-card red">
+    <div class="risk-title"><div class="risk-dot"></div>Dec 2025+ — Reality Check</div>
+    <div class="risk-desc">No NRC approval, no revenue, no PPA → profit taking → stock collapsed 75%</div>
+  </div>
+  <div class="risk-card green">
+    <div class="risk-title"><div class="risk-dot"></div>Apr 2026 — Current $48</div>
+    <div class="risk-desc">Still 378% above IPO; 14.7% backed by cash ($7.07/share); rest = pure speculation</div>
+  </div>
+  <div class="risk-card blue">
+    <div class="risk-title"><div class="risk-dot"></div>May 2026 — Next Catalyst</div>
+    <div class="risk-desc">Next earnings May 12: watch for NRC update, DOE loan progress, cash burn guidance</div>
+  </div>
+</div>
+
+<!-- SECTION 4: COMPETITION -->
+<div class="section-title">
+  <span class="section-num">4</span>
+  Competitive Landscape — SMR Race
+</div>
+
+<table class="data-table">
+  <thead>
+    <tr>
+      <th>Company</th>
+      <th>Technology</th>
+      <th>Capacity</th>
+      <th>Stage</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Oklo (OKLO)</strong></td><td>Aurora Fast Reactor</td><td>15MW thermal (~5MW e)</td><td>NRC Pre-App Review</td><td><span class="badge red">NYSE Listed</span></td>
+    </tr>
+    <tr>
+      <td>NuScale</td><td>VOYGR</td><td>77MW</td><td>NRC Approved → Project Cancelled</td><td><span class="badge orange">Bankrupt</span></td>
+    </tr>
+    <tr>
+      <td>TerraPower</td><td>Natrium</td><td>345MW</td><td>Construction (est. 2030)</td><td><span class="badge">Private (Gates)</span></td>
+    </tr>
+    <tr>
+      <td>GE Vernova</td><td>BWRX-300</td><td>300MW</td><td>Poland/Canada deployment</td><td><span class="badge blue">NYSE Listed</span></td>
+    </tr>
+    <tr>
+      <td>X-energy</td><td>Xe-100</td><td>80MW×4</td><td>NRC Pre-App</td><td><span class="badge">Private</span></td>
+    </tr>
+    <tr>
+      <td>China CNNC</td><td>ACP100</td><td>125MW</td><td>Commercial Approval</td><td><span class="badge">State Enterprise</span></td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>Oklo's key differentiator:</strong> Only pure-play publicly listed SMR developer in the US. However, it faces the same challenges as all SMR companies — cost overruns, regulatory hurdles, and unproven commercial deployment at scale.</p>
+
+<!-- SECTION 5: VALUATION -->
+<div class="section-title">
+  <span class="section-num">5</span>
+  Valuation — 85% Is "Dream Premium"
+</div>
+
+<div class="chart-grid">
+  <div class="chart-container">
+    <div class="chart-title">Price = Cash Backed ($7) + Speculative Premium ($41)</div>
+    <div id="chart4"></div>
+  </div>
+  <div class="chart-container">
+    <div class="metric-grid" style="grid-template-columns:1fr">
+      <div class="metric-card">
+        <div class="metric-label">Total Market Cap</div>
+        <div class="metric-value">$8.34B</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Cash Reserve</div>
+        <div class="metric-value">$1.23B</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Cash per Share</div>
+        <div class="metric-value">$7.07</div>
+      </div>
+      <div class="metric-card" style="background:#FFF3F0;border-color:#FFCDD2">
+        <div class="metric-label" style="color:var(--up)">Speculative Premium/Share</div>
+        <div class="metric-value" style="color:var(--up)">$41.00</div>
+        <div class="metric-change up">85% of stock price</div>
+      </div>
+    </div>
+    <div class="alert-box">
+      <strong>Key Insight:</strong> Only <strong>$7.07 (14.7%)</strong> of the current $48 price is backed by hard cash. The remaining <strong>$41</strong> is entirely speculative premium on Aurora's future commercialization.
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 6: RISKS -->
+<div class="section-title">
+  <span class="section-num">6</span>
+  Risk Matrix
+</div>
+
+<div class="risk-grid">
+  <div class="risk-card red">
+    <div class="risk-title"><div class="risk-dot"></div>NRC Approval Risk (MAXIMUM)</div>
+    <div class="risk-desc">
+      <ul>
+        <li>Aurora pre-app review ongoing since 2019 — zero approvals</li>
+        <li>SMR approval cycles typically 10-15 years</li>
+        <li>NuScale got NRC approval but still cancelled project</li>
+      </ul>
+    </div>
+  </div>
+  <div class="risk-card red">
+    <div class="risk-title"><div class="risk-dot"></div>Cost Overrun Risk</div>
+    <div class="risk-desc">
+      <ul>
+        <li>SMR costs historically 3-5x initial estimates</li>
+        <li>No commercial deployment data for Aurora</li>
+        <li>Cost per kWh remains unproven</li>
+      </ul>
+    </div>
+  </div>
+  <div class="risk-card orange">
+    <div class="risk-title"><div class="risk-dot"></div>Zero Revenue Risk</div>
+    <div class="risk-desc">
+      <ul>
+        <li>All value based on future projections</li>
+        <li>No signed binding PPAs — only LOIs</li>
+        <li>Any funding gap could be existential</li>
+      </ul>
+    </div>
+  </div>
+  <div class="risk-card orange">
+    <div class="risk-title"><div class="risk-dot"></div>Interest Income Disappearing</div>
+    <div class="risk-desc">
+      <ul>
+        <li>$29.1M interest income (2025) from Fed rate environment</li>
+        <li>Each 100bp rate cut = ~$12M less annual income</li>
+        <li>Cash burn accelerates when rates fall</li>
+      </ul>
+    </div>
+  </div>
+  <div class="risk-card red">
+    <div class="risk-title"><div class="risk-dot"></div>Share Dilution</div>
+    <div class="risk-desc">
+      <ul>
+        <li>Shares grew 68.9M → 173.6M in 2 years (+152%)</li>
+        <li>Further dilution expected for DOE loans</li>
+        <li>EPS will continue to deteriorate</li>
+      </ul>
+    </div>
+  </div>
+  <div class="risk-card green">
+    <div class="risk-title"><div class="risk-dot"></div>Cash Runway (POSITIVE)</div>
+    <div class="risk-desc">
+      <ul>
+        <li>$1.23B cash — 10+ years at current burn</li>
+        <li>DOE $11.9B loan program reduces equity needs</li>
+        <li>Minimal debt ($1.45M) = flexible balance sheet</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 7: INVESTMENT VERDICT -->
+<div class="section-title">
+  <span class="section-num">7</span>
+  Investment Verdict
+</div>
+
+<div class="verdict-box">
+  <div class="verdict-title">Composite Rating: Highly Speculative (2/5 Stars)</div>
+  <div class="verdict-text">
+    OKLO is a <strong style="color:#FFD54F">pure-concept pre-revenue nuclear SMR stock</strong> trading at $8.34B market cap with $0 revenue, $115M annual cash burn, and NRC approval pending since 2019. The stock rose +3523% to $193 in Oct 2025 on AI/nuclear hype, then collapsed 75% to $48. Only 14.7% of price ($7.07) is backed by hard cash. For context: NuScale (SMR pioneer) got NRC approval and still went bankrupt. <strong style="color:#FFD54F">Not suitable for conservative investors.</strong>
+  </div>
+  <div class="verdict-actions">
+    <div class="action-card">
+      <div class="action-label">Short-term (&lt;6mo)</div>
+      <div class="action-value" style="color:#EF5350">AVOID</div>
+      <div class="action-note">No near-term catalysts; risk/reward unfavorable at $48</div>
+    </div>
+    <div class="action-card">
+      <div class="action-label">Mid-term (6-18mo)</div>
+      <div class="action-value" style="color:#FFD54F">WATCH $25-60</div>
+      <div class="action-note">Track NRC update, DOE loan progress, Q1 2026 earnings May 12</div>
+    </div>
+    <div class="action-card">
+      <div class="action-label">Long-term (3yr+)</div>
+      <div class="action-value" style="color:#66BB6A">THESIS INTACT IF...</div>
+      <div class="action-note">NRC approval + 2-3 binding PPAs → target $150+. Probability: &lt;20%. Max 2-5% of portfolio.</div>
+    </div>
+  </div>
+</div>
+
+<table class="data-table">
+  <thead>
+    <tr>
+      <th>Dimension</th>
+      <th>Rating</th>
+      <th>Comment</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Business Quality</td>
+      <td><span class="stars">★★☆☆☆</span></td>
+      <td>SMR concept pure-play, but zero revenue, no commercial product</td>
+    </tr>
+    <tr>
+      <td>Technology Progress</td>
+      <td><span class="stars">★★☆☆☆</span></td>
+      <td>NRC pre-review since 2019, no commercial reactor built</td>
+    </tr>
+    <tr>
+      <td>Financial Health</td>
+      <td><span class="stars">★★★★☆</span></td>
+      <td>$1.23B cash, near-zero debt — but burn accelerating</td>
+    </tr>
+    <tr>
+      <td>Valuation</td>
+      <td><span class="stars">★☆☆☆☆</span></td>
+      <td>$8.34B for $0 revenue — 85% speculative premium</td>
+    </tr>
+    <tr>
+      <td>Competition</td>
+      <td><span class="stars">★★☆☆☆</span></td>
+      <td>First-mover listed advantage, but China/GE Vernova ahead</td>
+    </tr>
+    <tr class="highlight-red">
+      <td><strong>Overall</strong></td>
+      <td><span class="stars">★★☆☆☆</span></td>
+      <td><strong>Not suitable for risk-averse investors</strong></td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="alert-box">
+  <strong>Watch List Triggers:</strong> Watch for NRC Aurora decision update, DOE loan formal commitment, and first binding (non-LOI) PPA signing. These three events could be the only meaningful stock catalysts.
+</div>
+
+<!-- FOOTER -->
+<div class="report-footer">
+  <div>
+    <strong>Data Sources:</strong>
+    [1] Yahoo Finance (OKLO) | [2] StockAnalysis.com | [3] SEC EDGAR (CIK: 1849056) | [4] Oklo Inc. (oklo.com) | [5] Seeking Alpha | [6] Benzinga
+  </div>
+  <div>
+    Generated by Minis AI · 深度研究 Skill · 2026.04.02
+  </div>
+</div>
+
+</div><!-- /content -->
+
+<script>
+// Chart 0: Aurora specs comparison
+var chart0 = echarts.init(document.getElementById('chart0'));
+var option0 = {
+  tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+  legend: { data: ['Power (MW)', 'NRC Status'], top: 5 },
+  grid: { left: '3%', right: '4%', bottom: '8%', top: '15%', containLabel: true },
+  xAxis: { type: 'category', data: ['Oklo\nAurora', 'NuScale\nVOYGR', 'TerraPower\nNatrium', 'GE Vernova\nBWRX-300', 'X-energy\nXe-100'], axisLabel: { fontSize: 11 } },
+  yAxis: [
+    { type: 'value', name: 'MW', nameTextStyle: { fontSize: 11 }, axisLabel: { fontSize: 11 } },
+    { type: 'value', name: 'Years in NRC', nameTextStyle: { fontSize: 11 }, axisLabel: { fontSize: 11 } }
+  ],
+  series: [
+    { name: 'Power (MW)', type: 'bar', data: [5, 77, 345, 300, 320], itemStyle: { color: '#1565C0' }, barWidth: '35%' },
+    { name: 'NRC Status', type: 'bar', yAxisIndex: 1, data: [7, 0, -1, 2, 3], itemStyle: { color: function(p){ return p.data === 0 ? '#E53935' : p.data === -1 ? '#757575' : '#F57C00'; }}, barWidth: '35%', label: { show: true, position: 'top', fontSize: 10, formatter: function(p){ if(p.data===-1) return 'Cancelled'; if(p.data===0) return 'App Canceled'; return p.data+'yr'; }}
+    }
+  ]
+};
+chart0.setOption(option0);
+
+// Chart 1: Operating Loss vs Interest Income
+var chart1 = echarts.init(document.getElementById('chart1'));
+var option1 = {
+  tooltip: { trigger: 'axis' },
+  legend: { data: ['Operating Loss', 'Interest Income'], top: 5 },
+  grid: { left: '3%', right: '4%', bottom: '10%', top: '15%', containLabel: true },
+  xAxis: { type: 'category', data: ['FY2021', 'FY2022', 'FY2023', 'FY2024', 'FY2025'] },
+  yAxis: { type: 'value', name: '$M', axisLabel: { formatter: '${value}M' } },
+  series: [
+    { name: 'Operating Loss', type: 'bar', data: [-1.2, -1.8, -18.6, -52.8, -139.3], itemStyle: { color: '#E53935' }, label: { show: true, position: 'top', fontSize: 10, formatter: '-${Math.abs(v.value)}M' } },
+    { name: 'Interest Income', type: 'bar', data: [0.1, 7.3, 0.2, 7.7, 29.1], itemStyle: { color: '#43A047' }, label: { show: true, position: 'top', fontSize: 10, formatter: '+${value}M' } }
+  ]
+};
+chart1.setOption(option1);
+
+// Chart 2: FCF Burn
+var chart2 = echarts.init(document.getElementById('chart2'));
+var option2 = {
+  tooltip: { trigger: 'axis' },
+  grid: { left: '3%', right: '4%', bottom: '10%', top: '10%', containLabel: true },
+  xAxis: { type: 'category', data: ['FY2021', 'FY2022', 'FY2023', 'FY2024', 'FY2025'] },
+  yAxis: { type: 'value', name: '$M', axisLabel: { formatter: '-${value}M' } },
+  series: [{
+    type: 'bar',
+    data: [-1.9, -1.0, -16.1, -38.7, -115.4],
+    itemStyle: { color: function(p){ return p.data <= -100 ? '#C62828' : p.data <= -30 ? '#E53935' : '#F57C00'; } },
+    label: { show: true, position: 'top', fontSize: 10, formatter: '-${Math.abs(v.value)}M' }
+  }]
+};
+chart2.setOption(option2);
+
+// Chart 3: Monthly price history
+var chart3 = echarts.init(document.getElementById('chart3'));
+var priceData = [
+  ['2023-05', 10.69], ['2023-06', 10.43], ['2023-07', 10.33], ['2023-08', 10.36],
+  ['2023-09', 10.35], ['2023-10', 10.32], ['2023-11', 10.35], ['2023-12', 10.56],
+  ['2024-01', 11.12], ['2024-02', 10.64], ['2024-03', 11.42], ['2024-04', 13.74],
+  ['2024-05', 10.07], ['2024-06', 8.47], ['2024-07', 9.10], ['2024-08', 5.97],
+  ['2024-09', 8.09], ['2024-10', 22.46], ['2024-11', 23.54], ['2024-12', 21.23],
+  ['2025-01', 41.61], ['2025-02', 33.39], ['2025-03', 21.63], ['2025-04', 23.74],
+  ['2025-05', 52.72], ['2025-06', 55.99], ['2025-07', 76.59], ['2025-08', 73.64],
+  ['2025-09', 111.63], ['2025-10', 132.77], ['2025-11', 91.38], ['2025-12', 71.76],
+  ['2026-01', 79.62], ['2026-02', 62.95], ['2026-03', 49.59], ['2026-04', 48.07]
+];
+var option3 = {
+  tooltip: { trigger: 'axis' },
+  grid: { left: '3%', right: '4%', bottom: '12%', top: '10%', containLabel: true },
+  xAxis: { type: 'category', data: priceData.map(d => d[0]), axisLabel: { rotate: 45, fontSize: 10, interval: 2 } },
+  yAxis: {
+    type: 'value',
+    name: '$',
+    axisLabel: { formatter: '${value}' },
+    markLine: {
+      data: [{ yAxis: 193.84, name: 'ATH $193.84', lineStyle: { color: '#E53935', type: 'dashed' }, label: { formatter: 'ATH $193.84', fontSize: 10 } },
+             { yAxis: 48.07, name: 'Current $48.07', lineStyle: { color: '#1565C0', type: 'dashed' }, label: { formatter: 'Current $48', fontSize: 10 } }]
+    }
+  },
+  series: [{
+    type: 'line',
+    data: priceData.map(d => d[1]),
+    smooth: true,
+    lineStyle: { width: 2.5, color: '#1565C0' },
+    areaStyle: { color: { type: 'linear', x: 0, y: 0, x2: 0, y2: 1, colorStops: [{ offset: 0, color: 'rgba(21,101,192,0.3)' }, { offset: 1, color: 'rgba(21,101,192,0.02)' }] } },
+    itemStyle: { color: '#1565C0' },
+    markArea: {
+      data: [
+        [{ xAxis: '2024-09', itemStyle: { color: 'rgba(69,160,75,0.1)' } }, { xAxis: '2025-01' }]
+      ],
+      label: { formatter: 'DOE+AI Rally', fontSize: 10 }
+    }
+  }]
+};
+chart3.setOption(option3);
+
+// Chart 4: Cash vs Speculative premium pie
+var chart4 = echarts.init(document.getElementById('chart4'));
+var option4 = {
+  tooltip: { trigger: 'item', formatter: '{b}: ${c} ({d}%)' },
+  legend: { orient: 'vertical', right: '5%', top: 'center' },
+  series: [{
+    type: 'pie',
+    radius: ['40%', '70%'],
+    center: ['40%', '50%'],
+    data: [
+      { value: 7.07, name: 'Cash ($7.07)', itemStyle: { color: '#43A047' } },
+      { value: 41.00, name: 'Speculative Premium ($41)', itemStyle: { color: '#F57C00' } }
+    ],
+    label: { formatter: '{b}\n${c} ({d}%)', fontSize: 13, fontWeight: 'bold' },
+    labelLine: { show: true }
+  }]
+};
+chart4.setOption(option4);
+
+// Responsive
+window.addEventListener('resize', function() {
+  chart0.resize(); chart1.resize(); chart2.resize(); chart3.resize(); chart4.resize();
+});
+</script>
+</body>
+</html>
